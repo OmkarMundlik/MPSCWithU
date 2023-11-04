@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block style %}
+body{
+    padding:10px;
+}
+img{
+    height : 400px;
+}
+.image{
+    justify_content : center;
+    text-align: center;
+}
+.text{
+    justify_content : center;
+    align_items : center;
+}
+.container{
+    <!-- justify_content : center;
+    align_items : center; -->
+    border: 5px solid;
+    margin: auto;
+    width: 70%;
+    padding: 10px;
+}
+.header{
+    <!-- width : 70%; -->
+    border: 5px solid;
+    margin: auto;
+    width: 70%;
+    padding: 10px;
+}
+.header p{
+    text-align : left;
+}
+{% endblock style %}
+
+
+{% block body %}
+
+<div class="container">
+    <div class="header">
+        <h2>{{query.heading}}</h2>
+        <p>{{query.date}}</p>
+    </div>
+
+
+    <div class="image">
+        <img src="/media/{{query.image}}" alt="No Image found">
+    </div>
+    <br>
+    <div class="text">
+        {{query.description}}
+    </div>
+</div>
+{% endblock body %}

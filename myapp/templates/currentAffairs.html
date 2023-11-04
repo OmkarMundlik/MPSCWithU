@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block style %}
+
+.container{
+    display : flex;
+    border: 5px solid;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+.main{
+    flex: 3; /* Takes up 75% of available space */
+    background-color: #f0f0f0; /* Just for demonstration, you can set your desired background color */
+    padding: 10px; /* Add padding as needed */
+  }
+
+  .side {
+    flex: 1; /* Takes up the remaining 25% of available space */
+    background-color: #ccc; /* Just for demonstration, you can set your desired background color */
+    padding: 10px; /* Add padding as needed */
+  }
+
+{% endblock style %}
+
+
+{% block body %}
+
+<div class="container">
+    <div class="main">
+        <h2>Today's Current Affairs</h2>
+        {% for article in current %}
+        <a href="show_article/{{article.id}}"><h4>{{article.heading}}</h4></a>
+        {{article.date}}
+        <br>
+        <hr>
+        {% endfor %}
+    </div>
+    <div class="side">
+        <h2>
+            Past Current Affairs
+        </h2>
+        {% for date in previous %}
+            <a href="/show_previous_articles/{{date.date}}">{{date.date}}</a>
+            <hr>
+        {% endfor %}
+    </div>
+</div>
+{% comment %} 
+    <div class="container">
+        <div class="main">
+            <h2>{{date}}</h2>
+            {% for article in current %}
+            <a href="show_article/{{article.id}}"> <h4>{{article.heading}}</h4> </a>
+            {{article.date}}
+            <br>
+        </div>
+        <hr>
+
+        <div class="side">
+            {% endfor %}
+            {% for date in previous %}
+                <a href="show_previous_articles/{{date}}">{{date}}</a>
+                <hr>
+            {% endfor %}
+        </div>
+    </div> {% endcomment %}
+
+
+            
+           
+{% endblock body %}
+
