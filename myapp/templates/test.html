@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        #timer {
+            font-size: 20px;
+            color: red;
+        }
+        #result {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz</h1>
+        <p>Time Remaining: <span id="timer">15:00</span></p>
+        <div id="quiz">
+            <!-- Questions and options will be added here using JavaScript -->
+        </div>
+        <button id="submit">Submit</button>
+        <div id="result">
+            <h2>Result</h2>
+            <p>Your score: <span id="score"><b>0</b></span>/15</p>
+            <div id="answerKey"></div>
+        </div>
+    </div>
+
+    <script>
+        // Define your quiz questions and answers
+        const quizQuestions = JSON.parse('{{ questions|escapejs }}');
+        console.log(quizQuestions)
+        let timeRemaining = 900; // 15 minutes in seconds
+        let score = 0;
+        let currentQuestion = 0;
+
+        const timerElement = document.getElementById('timer');
+        const quizElement = document.getElementById('quiz');
+        const submitButton = document.getElementById('submit');
+        const resultElement = document.getElementById('result');
+        const scoreElement = document.getElementById('score');
+        const answerKeyElement = document.getElementById('answerKey');
+
+        let timerInterval;
+
+        function startTimer() {
+            timerInterval = setInterval(function () {
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                timerElement.innerHTML = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                timeRemaining--;
+
+                if (timeRemaining < 0) {
+                    clearInterval(timerInterval);
+                    showResult();
+                }
+            }, 1000);
+        }
+
+        function showQuestion() {
+            const question = quizQuestions[currentQuestion];
+            const options = ['a', 'b', 'c', 'd'].map((option) => {
+                return `
+                    <label>
+                        <input type="radio" name="q${currentQuestion}" value="${option}">
+                        ${question[`option_${option}`]}
+                    </label><br>
+                `;
+            });
+
+            quizElement.innerHTML = `
+                <h2> Question ${currentQuestion+1} </h2>
+                <hr>
+                <h3> ${question.description}</h2>
+                ${options.join('')}
+            `;
+        }
+
+        function showResult() {
+            clearInterval(timerInterval); // Remove the timer
+            quizElement.style.display = 'none';
+            submitButton.style.display = 'none';
+            resultElement.style.display = 'block';
+            scoreElement.innerHTML = score;
+            displayAnswerKey();
+        }
+
+        function displayAnswerKey() {
+            const answerKey = quizQuestions.map((question, index) => {
+                const correctAnswer = question.correct_option;
+                const description = question.answer_description;
+                var answer="answer";
+                if(correctAnswer == 'A'){
+                    answer = question.option_a;
+                }else if(correctAnswer == 'B'){
+                    answer = question.option_b;
+                }else if(correctAnswer=='C'){
+                    answer = question.option_c;
+                }else{
+                    answer = question.option_d;
+                }
+                return `
+                    <p>Question ${index + 1} : ${question.description}</p>
+                    <p>Correct Answer: Option <b>${correctAnswer.toUpperCase()}</b></p>
+                    <p><b>${answer}</b></p>
+                    <p>Answer Description : ${question.answer_description} </p>
+                    <hr>
+                `;
+            });
+            answerKeyElement.innerHTML = answerKey.join('');
+        }
+
+        function checkAnswer() {
+            const selectedOption = document.querySelector(`input[name="q${currentQuestion}"]:checked`);
+            if (selectedOption) {
+                console.log("Selected Option"+selectedOption.value)
+                console.log(quizQuestions[currentQuestion].correct_option)
+                if (selectedOption.value.toUpperCase() === quizQuestions[currentQuestion].correct_option) {
+                    score++;
+                }
+                currentQuestion++;
+                if (currentQuestion < quizQuestions.length) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            }
+        }
+
+        startTimer();
+        showQuestion();
+
+        submitButton.addEventListener('click', checkAnswer);
+    </script> 
+</body>
+</html>

@@ -25,7 +25,10 @@ urlpatterns = [
     path("", index, name="indxpage"),
     path('show_current_affairs', show_current_affairs, name="show_current_affairs"),
     path("show_article/<id>", show_single_article, name='show_single_article'),
-    path('show_previous_articles/<date>', show_previous_articles)
+    path('show_previous_articles/<date>', show_previous_articles),
+    path('create_test/', create_test, name="create_test"),
+    path('test_list/<subject>', test_list, name='test_list' ),
+    path('take_test/<id>', take_test, name="take_test")
 ]
 
 if settings.DEBUG:

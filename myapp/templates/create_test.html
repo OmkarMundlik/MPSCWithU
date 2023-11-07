@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<h1>Create a Test</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="test-details">
+            {{ test_form.subject.label_tag }}
+            {{ test_form.subject }}
+            {{ test_form.date.label_tag }}
+            {{ test_form.date }}
+        </div>
+
+        <h2>Questions</h2>
+        {{ question_formset.management_form }}
+        <table class="question-table">
+            {% for form in question_formset %}
+                
+                <tr class="question-form">
+                    <h3>Question {{forloop.counter}}</h3>
+                    <br>
+                    <td>{{ form.description.label_tag }}</td>
+                    <td>{{ form.description }}</td>
+                </tr>
+                <tr class="options">
+                    <td>{{ form.option_a.label_tag }}</td>
+                    <td>{{ form.option_a }}</td>
+                    <td>{{ form.option_b.label_tag }}</td>
+                    <td>{{ form.option_b }}</td>
+                    <td>{{ form.option_c.label_tag }}</td>
+                    <td>{{ form.option_c }}</td>
+                    <td>{{ form.option_d.label_tag }}</td>
+                    <td>{{ form.option_d }}</td>
+                </tr>
+                <tr class="correct-answer">
+                    <td>{{ form.correct_option.label_tag }}</td>
+                    <td>{{ form.correct_option }}</td>
+                </tr>
+                <tr class="answer-description">
+                    <td>{{ form.answer_description.label_tag }}</td>
+                    <td>{{ form.answer_description }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <button type="submit">Create Test</button>
+    </form>
+
+
+{% endblock body %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block style %}
+.main{
+    display: flex;
+}
+
+.test{
+    flex : 4;
+}
+{% endblock style %}
+
+
+{% block body %}
+    <div class="main">
+    {% for test in tests  %}
+        <div class="test">
+            <h3>Test {{forloop.counter}}</h3>
+            <p>{{test.date}}</p>
+            <a href="http://127.0.0.1:8000/take_test/{{test.id}}">link</a>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock body %}
+
